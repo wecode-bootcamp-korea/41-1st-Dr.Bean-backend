@@ -5,7 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const routes = require('./api/routes');
 
-const { mysqlDatabase } = require('./api/models/myDataSource');
+const { mysqlDatabase } = require('./api/models/dbconfig');
 
 const app = express();
 
