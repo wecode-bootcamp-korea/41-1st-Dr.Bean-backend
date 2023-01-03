@@ -3,9 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const routes = require('./routes');
+const routes = require('./api/routes');
 
-const { mysqlDatabase } = require('./models/myDataSource');
+const { mysqlDatabase } = require('./api/models/myDataSource');
 
 const app = express();
 
@@ -14,7 +14,6 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(routes);
 
-// Health Check
 app.get('/pong', async (req, res) => {
   res.status(200).json({ message: 'pingssss' });
 });
