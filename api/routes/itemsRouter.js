@@ -6,7 +6,8 @@ const router = express.Router();
 
 router.get("/:continentId", itemsControllers.getCategoryItems);
 router.get("/country/:countryId", itemsControllers.getSubCategoryItems);
-router.post("/:itemId", itemsControllers.itemDetailsPage);
+router.get("/detail/:itemId", itemsControllers.itemDetailsPage);
+router.post("/:itemId", itemsControllers.itemOptions);
 
 module.exports = {
   router,

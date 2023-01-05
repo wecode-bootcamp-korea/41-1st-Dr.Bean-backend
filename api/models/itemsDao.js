@@ -3,7 +3,8 @@ const { mysqlDatabase } = require("./dbconfig");
 const getCategoryItems = async (continentId) => {
   try {
     const result = await mysqlDatabase.query(
-      `SELECT
+      `
+      SELECT
         name,
         item_img,
         price,
@@ -13,7 +14,6 @@ const getCategoryItems = async (continentId) => {
     `,
       [continentId]
     );
-    console.log(result);
     return result;
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
@@ -25,7 +25,8 @@ const getCategoryItems = async (continentId) => {
 const getSubCategoryItems = async (countryId) => {
   try {
     const result = await mysqlDatabase.query(
-      `SELECT
+      `
+      SELECT
         name,
         item_img,
         price,
@@ -43,21 +44,11 @@ const getSubCategoryItems = async (countryId) => {
   }
 };
 
-const itemDetailsPage = async (itemId, size, grind) => {
+const itemDetailsPage = async (itemId) => {
   try {
-    console.log(1);
-    await mysqlDatabase.query(
-      `INSERT INTO item_options (
-        grind_option_id,
-        size_option_id,
-        item_id
-      ) VALUES (?, ?, ?)
-      `,
-      [grind, size, itemId]
-    );
-    console.log(2);
     const result = await mysqlDatabase.query(
-      `SELECT
+      `
+      SELECT
         id,
         name,
         description,
@@ -68,10 +59,27 @@ const itemDetailsPage = async (itemId, size, grind) => {
       `,
       [itemId]
     );
-    console.log(result);
     return result;
   } catch (err) {
-    console.log(err);
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 500;
+    throw error;
+  }
+};
+
+const itemOptions = async (size, grind, itemId) => {
+  try {
+    return await mysqlDatabase.query(
+      `
+      INSERT INTO item_options (
+        grind_option_id,
+        size_option_id,
+        item_id
+      ) VALUES (?, ?, ?)
+      `,
+      [grind, size, itemId]
+    );
+  } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
     error.statusCode = 500;
     throw error;
@@ -82,4 +90,5 @@ module.exports = {
   getCategoryItems,
   getSubCategoryItems,
   itemDetailsPage,
+  itemOptions,
 };

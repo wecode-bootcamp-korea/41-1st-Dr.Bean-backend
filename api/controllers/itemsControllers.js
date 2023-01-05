@@ -25,15 +25,25 @@ const getSubCategoryItems = async (req, res) => {
 const itemDetailsPage = async (req, res) => {
   try {
     const { itemId } = req.params;
-    const { size, grind } = req.body;
-    console.log(size);
-    console.log(grind);
+
+    const result = await itemsServices.itemDetailsPage(itemId);
+    return res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
+
+const itemOptions = async (req, res) => {
+  try {
+    const { size, grind, itemId } = req.body;
 
     if (!size || !grind) {
       return res.status(400).json({ message: "BUTTON_ERROR" });
     }
-    const result = await itemsServices.itemDetailsPage(itemId, size, grind);
-    return res.status(200).json(result);
+
+    await itemsServices.itemOptions(size, grind, itemId);
+    return res.status(200).json({ message: "OPTIONS_SELECT!" });
   } catch (err) {
     console.log(err);
     return res.status(err.statusCode || 500).json({ message: err.message });
@@ -44,4 +54,5 @@ module.exports = {
   getCategoryItems,
   getSubCategoryItems,
   itemDetailsPage,
+  itemOptions,
 };
