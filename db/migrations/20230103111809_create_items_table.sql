@@ -4,7 +4,7 @@ CREATE TABLE items (
   name VARCHAR(50) NOT NULL,
   description VARCHAR(1000) NULL,
   item_img VARCHAR(2000) NOT NULL,
-  price INT NOT NULL,
+  price DECIMAL(10, 3) NOT NULL,
   category_id INT NOT NULL,
   country_id INT NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
