@@ -14,7 +14,7 @@ const getCategoryItems = async (req, res) => {
 const getSubCategoryItems = async (req, res) => {
   try {
     const { countryId } = req.params;
-    const [result] = await itemsServices.getSubCategoryItems(countryId);
+    const result = await itemsServices.getSubCategoryItems(countryId);
     return res.status(200).json(result);
   } catch (err) {
     console.log(err);
