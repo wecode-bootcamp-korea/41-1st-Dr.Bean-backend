@@ -1,6 +1,7 @@
 const { mysqlDatabase } = require("./dbconfig");
 
-const getCarts = async (userId) => {
+const getUserCarts = async (userId) => {
+  console.log("cartService_userId???????????????????????????????", userId);
   try {
     const result = await mysqlDatabase.query(
       `
@@ -33,7 +34,8 @@ const getCarts = async (userId) => {
   }
 };
 
-const postCart = async (quantity, userId, itemId, itemOptionId) => {
+const postCart = async (quantity, itemId, itemOptionId) => {
+  console.log("cartDao_postcart_userId????????????????????????", userId);
   try {
     return await mysqlDatabase.query(
       `
@@ -71,7 +73,7 @@ const deleteCart = async (cartId) => {
 };
 
 module.exports = {
-  getCarts,
+  getUserCarts,
   postCart,
   deleteCart,
 };

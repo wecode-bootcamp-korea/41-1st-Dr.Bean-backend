@@ -4,6 +4,6 @@ const router = express.Router();
 
 const cartRouter = require("./cartRouter");
 
-router.use("", cartRouter.router);
+router.use("/cart", cartRouter.router);
 
 module.exports = router;
