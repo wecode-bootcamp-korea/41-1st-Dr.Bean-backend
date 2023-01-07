@@ -9,7 +9,7 @@ const createUser = async (userId, name, password, email, phoneNumber, point) => 
     await mysqlDatabase.query(
       `
       INSERT INTO users (
-        username,
+        user_id,
         name,
         password,
         email,
@@ -33,7 +33,7 @@ const login = async (userId) => {
       SELECT
         *
       FROM users
-      WHERE username = ?
+      WHERE user_id = ?
       `,
       [userId]
     );
