@@ -25,6 +25,7 @@ const signin = async (req, res) => {
     }
 
     const { jwtToken, checkHash } = await userService.signIn(userId, password);
+    console.log(jwtToken, checkHash);
 
     if (!checkHash) {
       res.status(401).json({ message: "PASSWORD_IS_DIFFERENT" });
