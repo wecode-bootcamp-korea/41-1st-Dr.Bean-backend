@@ -29,7 +29,9 @@ const getSubCategoryItems = async (countryId) => {
       SELECT
         c.id as id,
         c.continent as continent,
+        c.english_continent,
         s.country as country,
+        s.english_country,
         s.content as content,
         JSON_ARRAYAGG(
           JSON_OBJECT(
