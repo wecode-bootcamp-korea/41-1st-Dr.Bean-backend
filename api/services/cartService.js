@@ -5,7 +5,7 @@ const getUserCarts = async (userId) => {
   return result;
 };
 
-const postCart = async (quantity, itemId, itemOptionId) => {
+const postUserCarts = async (quantity, itemId, itemOptionId) => {
   return await cartDao.postCart(quantity, itemId, itemOptionId);
 };
 
@@ -14,6 +14,6 @@ const deleteCart = async (cartId) => {
 };
 module.exports = {
   getUserCarts,
-  postCart,
+  postUserCarts,
   deleteCart,
 };
