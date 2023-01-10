@@ -1,6 +1,6 @@
 const orderServices = require("../services/orderServices");
 
-const getOrder = async (req, res) => {
+const getOrders = async (req, res) => {
   try {
     const result = await orderServices.getOrder(req.userId);
     return res.status(200).json(result);
@@ -28,6 +28,6 @@ const addressAndItems = async (req, res) => {
 };
 
 module.exports = {
-  getOrder,
+  getOrders,
   addressAndItems,
 };

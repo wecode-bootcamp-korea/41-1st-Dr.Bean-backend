@@ -7,7 +7,7 @@ const itemsRouter = require("./itemsRouter");
 const orderRouter = require("./orderRouter");
 
 router.use("/items", itemsRouter.router);
-router.use("/order", orderRouter.router);
+router.use("/orders", orderRouter.router);
 router.use("", userRouter.router);
 
 module.exports = router;

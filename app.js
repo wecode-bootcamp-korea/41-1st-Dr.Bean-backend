@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const routes = require("./api/routes");
 
 const { mysqlDatabase } = require("./api/models/dbconfig");
+const { globalErrorHandler } = require('./api/middleware/error');
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 app.use(routes);
+app.use(globalErrorHandler)
 
 app.get("/pong", async (req, res) => {
   res.status(200).json({ message: "pingssss" });

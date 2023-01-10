@@ -1,7 +1,6 @@
 const { mysqlDatabase } = require("./dbconfig");
 
 const getCategoryItems = async (continentId) => {
-  try {
     const result = await mysqlDatabase.query(
       `
       SELECT
@@ -15,11 +14,6 @@ const getCategoryItems = async (continentId) => {
       [continentId]
     );
     return result;
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
 };
 
 const getSubCategoryItems = async (countryId) => {

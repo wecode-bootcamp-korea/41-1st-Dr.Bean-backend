@@ -28,6 +28,31 @@ const getOrder = async (userId) => {
   }
 };
 
+//트랜잭션 필수
+
+const createOrupdateUserAddresss = () => {
+}
+
+const createOrderData = () => {
+
+}
+
+const createOrderItemsData = () => {
+
+}
+
+const createOrder = () => {
+  try {
+    queryRunner.startTransaction()
+
+    await createOrupdateUserAddresss()
+    await createOrderItemsData()
+    await createOrder()
+  } catch {
+    queryRunner.rollbackTransaction()
+  }
+}
+
 const addressAndItems = async (zipCode, address, reAddress, message, size, grind, itemId, userId) => {
   try {
     await mysqlDatabase.query(
