@@ -5,10 +5,10 @@ const getCategoryItems = async (continentId) => {
     const result = await mysqlDatabase.query(
       `
       SELECT
+        items.id,
         name,
         item_img,
-        price,
-        continent_id as id
+        price
       FROM items
       WHERE continent_id = ?
     `,
@@ -27,22 +27,25 @@ const getSubCategoryItems = async (countryId) => {
     const result = await mysqlDatabase.query(
       `
       SELECT
+        c.id as id,
         c.continent as continent,
+        c.english_continent,
         s.country as country,
+        s.english_country,
         s.content as content,
         JSON_ARRAYAGG(
           JSON_OBJECT(
+            "id", i.id,
             "name", i.name,
             "img", i.item_img,
-            "price", i.price,
-            "countryId", i.country_id
+            "price", i.price
           )
         ) as items
       FROM items i
       INNER JOIN categories c ON c.id = i.continent_id
       INNER JOIN sub_categories s ON s.id = i.country_id
       WHERE i.country_id = ?
-      GROUP BY s.country,c.continent;
+      GROUP BY s.country, c.continent, c.id;
       `,
       [countryId]
     );
