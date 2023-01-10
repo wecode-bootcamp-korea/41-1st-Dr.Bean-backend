@@ -5,8 +5,8 @@ const getOrder = async (userId) => {
   return result;
 };
 
-const addressAndItems = async (zipCode, address, reAddress, message, size, grind, itemId) => {
-  const result = await oredrDao.addressAndItems(zipCode, address, reAddress, message, size, grind, itemId);
+const addressAndItems = async (zipCode, address, reAddress, message, size, grind, itemId, userId) => {
+  const result = await oredrDao.addressAndItems(zipCode, address, reAddress, message, size, grind, itemId, userId);
   return result;
 };
 module.exports = {

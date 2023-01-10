@@ -19,7 +19,7 @@ const addressAndItems = async (req, res) => {
       return res.status(400).json({ message: "ADDRESS_ERROR" });
     }
 
-    await orderServices.addressAndItems(zipCode, address, reAddress, message, size, grind, itemId);
+    await orderServices.addressAndItems(zipCode, address, reAddress, message, size, grind, itemId, req.userId);
     return res.status(200).json({ message: "Shipping address registration complete" });
   } catch (err) {
     console.log(err);
