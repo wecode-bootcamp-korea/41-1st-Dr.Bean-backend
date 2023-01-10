@@ -13,7 +13,7 @@ const getUserCarts = async (req, res) => {
 const postUserCarts = async (req, res) => {
   try {
     const { quantity, itemId, itemOptionId } = req.body;
-    await cartService.postCart(quantity, itemId, itemOptionId);
+    await cartService.postUserCarts(quantity, itemId, itemOptionId);
     return res.status(200).json({ message: "CART_LIST_CREATED" });
   } catch (err) {
     console.log(err);

@@ -6,7 +6,7 @@ const getUserCarts = async (userId) => {
 };
 
 const postUserCarts = async (quantity, itemId, itemOptionId) => {
-  return await cartDao.postCart(quantity, itemId, itemOptionId);
+  return await cartDao.postUserCarts(quantity, itemId, itemOptionId);
 };
 
 const deleteCart = async (cartId) => {
