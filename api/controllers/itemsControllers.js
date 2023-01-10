@@ -25,11 +25,20 @@ const getSubCategoryItems = async (req, res) => {
 const itemDetailsPage = async (req, res) => {
   try {
     const { itemId } = req.params;
-
-    const [result] = await itemsServices.itemDetailsPage(itemId);
+    const result = await itemsServices.itemDetailsPage(itemId);
     return res.status(200).json(result);
   } catch (err) {
-    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
+
+const getItemReviews = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const { limit } = req.query;
+    const result = await itemsServices.getItemReviews(itemId, parseInt(limit));
+    return res.status(200).json(result);
+  } catch (err) {
     return res.status(err.statusCode || 500).json({ message: err.message });
   }
 };
@@ -55,4 +64,5 @@ module.exports = {
   getSubCategoryItems,
   itemDetailsPage,
   itemOptions,
+  getItemReviews,
 };

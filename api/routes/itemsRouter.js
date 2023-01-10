@@ -12,6 +12,8 @@ router.get("/country/:countryId", itemsControllers.getSubCategoryItems);
 router.get("/detail/:itemId", itemsControllers.itemDetailsPage);
 // 상세페이지 옵션보내주
 router.post("/:itemId", itemsControllers.itemOptions);
+//아이템 리뷰 조회
+router.get("/reviews/:itemId", itemsControllers.getItemReviews);
 
 module.exports = {
   router,
