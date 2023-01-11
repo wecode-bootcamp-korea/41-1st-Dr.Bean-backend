@@ -5,9 +5,9 @@ require("dotenv").config;
 const validateToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    const jwtVerify = jwt.verify(token, "drBeanProject");
+    const jwtVerify = jwt.verify(token, process.env.SECRETKEY);
 
-    userId = jwtVerify;
+    req.userId = jwtVerify;
     next();
   } catch (err) {
     console.error(err);

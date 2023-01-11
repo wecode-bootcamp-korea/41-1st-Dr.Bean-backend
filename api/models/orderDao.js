@@ -1,8 +1,5 @@
 const { mysqlDatabase } = require("./dbconfig");
 
-// 데이터베이스에 트랜잭션 연결
-const queryRunner = mysqlDatabase.createQueryRunner();
-
 const ORDER_STATUS = Object.freeze({
   상품준비중: 1,
   배송중: 2,
