@@ -1,5 +1,8 @@
 const { mysqlDatabase } = require("./dbconfig");
 
+// 데이터베이스에 트랜잭션 연결
+const queryRunner = mysqlDatabase.createQueryRunner();
+
 const ORDER_STATUS = Object.freeze({
   상품준비중: 1,
   배송중: 2,
@@ -28,7 +31,7 @@ const getOrder = async (userId) => {
   }
 };
 
-const addressAndItems = async (zipCode, address, reAddress, message, size, grind, itemId, userId) => {
+const addressAndItems = async (zipCode, address, reAddress, message, size, grind, itemId, userId, itemOptions) => {
   try {
     await mysqlDatabase.query(
       `
@@ -54,7 +57,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       [size, grind, itemId]
     );
 
-    const [result] = await mysqlDatabase.query(
+    const [user] = await mysqlDatabase.query(
       `
       SELECT
         id
@@ -72,7 +75,30 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
         order_status_id
       ) VALUES (?, ?, ?)
       `,
-      [userId, result.id, ORDER_STATUS.배송중]
+      [userId, user.id, ORDER_STATUS.배송중]
+    );
+
+    const [orderId] = await mysqlDatabase.query(
+      `
+      SELECT
+        id
+      FROM orders
+      WHERE user_id = ?
+      `,
+      [userId]
+    );
+
+    await mysqlDatabase.query(
+      `
+      INSERT INTO order_items (
+        item_id,
+        quantity,
+        item_option_id,
+        order_status_id,
+        order_id
+      ) VALUES (?, ?, ?, ?, ?)
+      `,
+      [itemId, 1, itemOptions, ORDER_STATUS.배송중, orderId.id]
     );
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
