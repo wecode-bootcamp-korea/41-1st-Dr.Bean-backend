@@ -1,7 +1,16 @@
 const { mysqlDatabase } = require("./dbconfig");
 
-const getCategoryItems = async (continentId) => {
+const getCategoryItems = async (continentId, size, color) => {
   try {
+    let filter =``
+
+    if (continentId) filter += `continentId = ${continentId} AND`
+    if (size) filter += ` size = ${size} AND`
+    if (color) filter += ` color IN (${color})`
+
+    if (filter) {
+      filter = 'WHERE' + filter
+    }
     const result = await mysqlDatabase.query(
       `
       SELECT
@@ -10,9 +19,9 @@ const getCategoryItems = async (continentId) => {
         item_img,
         price
       FROM items
-      WHERE continent_id = ?
+      ?
     `,
-      [continentId]
+      [filter, continentId]
     );
     return result;
   } catch (err) {
