@@ -1,5 +1,8 @@
 const { mysqlDatabase } = require("./dbconfig");
 
+// 데이터베이스에 트랜잭션 연결
+const queryRunner = mysqlDatabase.createQueryRunner();
+
 const ORDER_STATUS = Object.freeze({
   상품준비중: 1,
   배송중: 2,
@@ -54,7 +57,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       [size, grind, itemId]
     );
 
-    const [users] = await mysqlDatabase.query(
+    const [user] = await mysqlDatabase.query(
       `
       SELECT
         id
@@ -72,7 +75,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
         order_status_id
       ) VALUES (?, ?, ?)
       `,
-      [userId, users.id, ORDER_STATUS.배송중]
+      [userId, user.id, ORDER_STATUS.배송중]
     );
 
     const [orderId] = await mysqlDatabase.query(
