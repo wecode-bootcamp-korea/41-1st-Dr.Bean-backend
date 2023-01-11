@@ -80,6 +80,31 @@ const itemDetailsPage = async (itemId) => {
   }
 };
 
+const getItemReviews = async (itemId, limit) => {
+  try {
+    const result = await mysqlDatabase.query(
+      `
+      SELECT
+        r.id,
+        r.user_name,
+        r.review_title,
+        r.review_content,
+        ri.review_img
+      FROM reviews r
+      INNER JOIN review_images ri ON ri.id = r.review_image_id
+      WHERE r.item_id = ?
+      LIMIT 0, ?
+      `,
+      [itemId, limit]
+    );
+    return result;
+  } catch (err) {
+    const error = new Error("INVALID_DATA_INPUT");
+    error.statusCode = 500;
+    throw error;
+  }
+};
+
 const itemOptions = async (size, grind, itemId) => {
   try {
     return await mysqlDatabase.query(
@@ -104,4 +129,5 @@ module.exports = {
   getSubCategoryItems,
   itemDetailsPage,
   itemOptions,
+  getItemReviews,
 };

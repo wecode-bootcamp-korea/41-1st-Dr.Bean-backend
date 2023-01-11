@@ -15,6 +15,11 @@ const itemDetailsPage = async (itemId) => {
   return result;
 };
 
+const getItemReviews = async (itemId, limit) => {
+  const result = await itemsDao.getItemReviews(itemId, limit);
+  return result;
+};
+
 const itemOptions = async (size, grind, itemId) => {
   const reuslt = await itemsDao.itemOptions(size, grind, itemId);
   return reuslt;
@@ -25,4 +30,5 @@ module.exports = {
   getSubCategoryItems,
   itemDetailsPage,
   itemOptions,
+  getItemReviews,
 };

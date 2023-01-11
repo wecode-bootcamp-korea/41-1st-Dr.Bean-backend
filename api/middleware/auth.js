@@ -11,7 +11,7 @@ const validateToken = async (req, res, next) => {
     next();
   } catch (err) {
     console.error(err);
-    err.statusCode = 400;
+    response.status(401).json({ message: "Invalid Access Token" });
     next(err);
   }
 };
