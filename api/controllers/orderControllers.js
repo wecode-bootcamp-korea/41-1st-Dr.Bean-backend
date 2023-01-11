@@ -12,14 +12,13 @@ const getOrder = async (req, res) => {
 
 const addressAndItems = async (req, res) => {
   try {
-    const { zipCode, address, reAddress, message, size, grind, itemId } = req.body;
-    console.log(zipCode, address, reAddress, message, size, grind, itemId);
+    const { zipCode, address, reAddress, message, size, grind, itemId, itemOptions } = req.body;
 
     if (!zipCode || !address || !reAddress) {
       return res.status(400).json({ message: "ADDRESS_ERROR" });
     }
 
-    await orderServices.addressAndItems(zipCode, address, reAddress, message, size, grind, itemId, req.userId);
+    await orderServices.addressAndItems(zipCode, address, reAddress, message, size, grind, itemId, req.userId, itemOptions);
     return res.status(200).json({ message: "Shipping address registration complete" });
   } catch (err) {
     console.log(err);
