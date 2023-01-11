@@ -80,7 +80,7 @@ const itemDetailsPage = async (itemId) => {
   }
 };
 
-const getItemReviews = async (itemId, limit) => {
+const getItemReviews = async (itemId, offset, limit) => {
   try {
     const result = await mysqlDatabase.query(
       `
@@ -93,9 +93,9 @@ const getItemReviews = async (itemId, limit) => {
       FROM reviews r
       INNER JOIN review_images ri ON ri.id = r.review_image_id
       WHERE r.item_id = ?
-      LIMIT 0, ?
+      LIMIT ?, ?
       `,
-      [itemId, limit]
+      [itemId, offset, limit]
     );
     return result;
   } catch (err) {

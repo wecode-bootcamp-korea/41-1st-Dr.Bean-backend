@@ -35,8 +35,8 @@ const itemDetailsPage = async (req, res) => {
 const getItemReviews = async (req, res) => {
   try {
     const { itemId } = req.params;
-    const { limit } = req.query;
-    const result = await itemsServices.getItemReviews(itemId, parseInt(limit));
+    const { offset, limit } = req.query;
+    const result = await itemsServices.getItemReviews(itemId, parseInt(offset), parseInt(limit));
     return res.status(200).json(result);
   } catch (err) {
     return res.status(err.statusCode || 500).json({ message: err.message });

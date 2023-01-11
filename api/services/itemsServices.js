@@ -15,8 +15,8 @@ const itemDetailsPage = async (itemId) => {
   return result;
 };
 
-const getItemReviews = async (itemId, limit) => {
-  const result = await itemsDao.getItemReviews(itemId, limit);
+const getItemReviews = async (itemId, offset, limit) => {
+  const result = await itemsDao.getItemReviews(itemId, offset, limit);
   return result;
 };
 
