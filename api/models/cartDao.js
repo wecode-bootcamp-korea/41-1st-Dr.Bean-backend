@@ -1,6 +1,6 @@
 const { mysqlDatabase } = require("./dbconfig");
 
-const getUserCarts = async (userId) => {
+const getUserCart = async (userId) => {
   try {
     const result = await mysqlDatabase.query(
       `
@@ -13,7 +13,7 @@ const getUserCarts = async (userId) => {
         go.grind,
         so.grams,
         so.option_price
-                
+
       FROM carts c
       INNER JOIN users u           ON c.user_id = u.id
       INNER JOIN items i           ON c.item_id = i.id
@@ -71,7 +71,7 @@ const deleteCart = async (cartId) => {
 };
 
 module.exports = {
-  getUserCarts,
+  getUserCart,
   postUserCarts,
   deleteCart,
 };

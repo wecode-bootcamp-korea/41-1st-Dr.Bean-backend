@@ -1,8 +1,8 @@
 const cartService = require("../services/cartService");
 
-const getUserCarts = async (req, res) => {
+const getUserCart = async (req, res) => {
   try {
-    const result = await cartService.getUserCarts(userId);
+    const result = await cartService.getUserCart(userId);
     return res.status(200).json(result);
   } catch (err) {
     console.log(err);
@@ -33,7 +33,7 @@ const deleteCart = async (req, res) => {
 };
 
 module.exports = {
-  getUserCarts,
+  getUserCart,
   postUserCarts,
   deleteCart,
 };
