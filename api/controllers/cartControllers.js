@@ -1,8 +1,8 @@
-const cartService = require("../services/cartService");
+const cartServices = require("../services/cartServices");
 
 const getUserCart = async (req, res) => {
   try {
-    const result = await cartService.getUserCart(userId);
+    const result = await cartServices.getUserCart(req.userId);
     return res.status(200).json(result);
   } catch (err) {
     console.log(err);
@@ -12,8 +12,8 @@ const getUserCart = async (req, res) => {
 
 const postUserCarts = async (req, res) => {
   try {
-    const { quantity, itemId, itemOptionId } = req.body;
-    await cartService.postUserCarts(quantity, itemId, itemOptionId);
+    const { itemId, size, grind, quantity } = req.body;
+    await cartServices.postUserCarts(req.userId, itemId, size, grind, quantity);
     return res.status(200).json({ message: "CART_LIST_CREATED" });
   } catch (err) {
     console.log(err);
@@ -24,7 +24,7 @@ const postUserCarts = async (req, res) => {
 const deleteCart = async (req, res) => {
   try {
     const { cartId } = req.params;
-    await cartService.deleteCart(cartId);
+    await cartServices.deleteCart(cartId, req.userId);
     return res.status(200).json({ message: "CART_LIST_DELETED" });
   } catch (err) {
     console.log(err);

@@ -5,7 +5,8 @@ const getUserCart = async (userId) => {
     const result = await mysqlDatabase.query(
       `
       SELECT
-        u.id,
+        c.id as cart_id,
+        u.id as user_id,
         c.quantity,
         i.name,
         i.item_img,
@@ -13,7 +14,6 @@ const getUserCart = async (userId) => {
         go.grind,
         so.grams,
         so.option_price
-
       FROM carts c
       INNER JOIN users u           ON c.user_id = u.id
       INNER JOIN items i           ON c.item_id = i.id
@@ -24,7 +24,6 @@ const getUserCart = async (userId) => {
       `,
       [userId]
     );
-
     return result;
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
@@ -33,18 +32,28 @@ const getUserCart = async (userId) => {
   }
 };
 
-const postUserCarts = async (quantity, itemId, itemOptionId) => {
+const postUserCarts = async (userId, itemId, size, grind, quantity) => {
   try {
+    const [itemOptions] = await mysqlDatabase.query(
+      `
+      SELECT
+        id
+      FROM item_options
+      WHERE size_option_id = ? AND grind_option_id = ? AND item_id = ?
+      `,
+      [size, grind, itemId]
+    );
+
     return await mysqlDatabase.query(
       `
       INSERT INTO carts(
         quantity,
-        user_id,
         item_id,
-        item_option_id
+        item_option_id,
+        user_id
       ) VALUES (?, ?, ?, ?);
       `,
-      [quantity, userId, itemId, itemOptionId]
+      [quantity, itemId, itemOptions.id, userId]
     );
   } catch {
     const error = new Error("INVALID_DATA_INPUT");
@@ -53,15 +62,15 @@ const postUserCarts = async (quantity, itemId, itemOptionId) => {
   }
 };
 
-const deleteCart = async (cartId) => {
+const deleteCart = async (cartId, userId) => {
   try {
     return await mysqlDatabase.query(
       `
       DELETE FROM
         carts
-      WHERE id = ?
+      WHERE id = ? AND user_id = ? 
       `,
-      [cartId]
+      [cartId, userId]
     );
   } catch {
     const error = new Error("INVALID_DATA_INPUT");
