@@ -59,7 +59,7 @@ const getSubCategoryItems = async (countryId) => {
 
 const itemDetailsPage = async (itemId) => {
   try {
-    const result = await mysqlDatabase.query(
+    const [result] = await mysqlDatabase.query(
       `
       SELECT
         id,
@@ -80,7 +80,7 @@ const itemDetailsPage = async (itemId) => {
   }
 };
 
-const getItemReviews = async (itemId, limit) => {
+const getItemReviews = async (itemId, offset, limit) => {
   try {
     const result = await mysqlDatabase.query(
       `
@@ -93,9 +93,9 @@ const getItemReviews = async (itemId, limit) => {
       FROM reviews r
       INNER JOIN review_images ri ON ri.id = r.review_image_id
       WHERE r.item_id = ?
-      LIMIT 0, ?
+      LIMIT ?, ?
       `,
-      [itemId, limit]
+      [itemId, offset, limit]
     );
     return result;
   } catch (err) {
@@ -105,17 +105,18 @@ const getItemReviews = async (itemId, limit) => {
   }
 };
 
-const itemOptions = async (size, grind, itemId) => {
+const itemOptions = async (quantity, size, grind, itemId) => {
   try {
-    return await mysqlDatabase.query(
+    await mysqlDatabase.query(
       `
       INSERT INTO item_options (
-        grind_option_id,
+        quantity,
         size_option_id,
+        grind_option_id,
         item_id
-      ) VALUES (?, ?, ?)
+      ) VALUES (?, ?, ?, ?)
       `,
-      [grind, size, itemId]
+      [quantity, size, grind, itemId]
     );
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
