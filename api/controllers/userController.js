@@ -29,7 +29,7 @@ const signin = async (req, res) => {
     if (!checkHash) {
       res.status(401).json({ message: "PASSWORD_IS_DIFFERENT" });
     }
-    return res.status(200).json({ message: jwtToken });
+    return res.status(200).json({ accessToken: jwtToken });
   } catch (err) {
     console.log(err);
     return res.status(err.statusCode || 500).json({ message: err.message });
