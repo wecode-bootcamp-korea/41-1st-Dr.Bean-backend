@@ -96,7 +96,6 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       `,
       [itemId, 1, itemOptions.id, ORDER_STATUS.배송중, orderId.id]
     );
-    console.log(itemOptions.id);
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
     error.statusCode = 500;
