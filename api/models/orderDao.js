@@ -28,7 +28,7 @@ const getOrder = async (userId) => {
   }
 };
 
-const addressAndItems = async (zipCode, address, reAddress, message, size, grind, itemId, userId, itemOptions) => {
+const addressAndItems = async (zipCode, address, reAddress, message, size, grind, itemId, userId) => {
   try {
     await mysqlDatabase.query(
       `
@@ -43,13 +43,12 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       [zipCode, address, reAddress, message, userId]
     );
 
-    await mysqlDatabase.query(
+    const [itemOptions] = await mysqlDatabase.query(
       `
-      INSERT INTO item_options (
-        size_option_id,
-        grind_option_id,
-        item_id
-      ) VALUES(?, ?, ?)
+      SELECT
+        id
+      FROM item_options
+      WHERE size_option_id = ? AND grind_option_id = ? AND item_id = ?
       `,
       [size, grind, itemId]
     );
@@ -59,7 +58,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       SELECT
         id
       FROM users_address
-      WHERE id = ?
+      WHERE user_id = ?
       `,
       [userId]
     );
@@ -95,7 +94,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
         order_id
       ) VALUES (?, ?, ?, ?, ?)
       `,
-      [itemId, 1, itemOptions, ORDER_STATUS.배송중, orderId.id]
+      [itemId, 1, itemOptions.id, ORDER_STATUS.배송중, orderId.id]
     );
   } catch (err) {
     const error = new Error("INVALID_DATA_INPUT");
