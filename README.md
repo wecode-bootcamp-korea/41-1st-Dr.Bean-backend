@@ -1,4 +1,4 @@
-![waving](https://capsule-render.vercel.app/api?type=waving&width=150%&height=200&fontAlignY=40&text=🎞Dr.Bean&color=gradient)
+![waving](https://capsule-render.vercel.app/api?type=waving&width=150%&height=200&fontAlignY=40&text=Dr.Bean&color=gradient)
 
 - 시연영상 :
 - 닥터마틴 홈페이지 클론코딩
