@@ -59,10 +59,34 @@ const itemOptions = async (req, res) => {
   }
 };
 
+const postItemReviews = async (req, res) => {
+  try {
+    const { reviewTitle, reviewDetails, reviewImage, rates, itemId } = req.body;
+    await itemsServices.postItemReviews(reviewTitle, reviewDetails, reviewImage, rates, req.userId, itemId);
+    return res.status(200).json({ message: "REVIEW_CREATED!" });
+  } catch (err) {
+    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
+
+const deleteItemReviews = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    await itemsServices.deleteItemReviews(reviewId);
+    return res.status(200).json({ message: "REVIEW_DELETED" });
+  } catch (err) {
+    console.log(err);
+    return res.status(err.statusCode || 500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   getCategoryItems,
   getSubCategoryItems,
   itemDetailsPage,
   itemOptions,
   getItemReviews,
+  postItemReviews,
+  deleteItemReviews,
 };
