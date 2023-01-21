@@ -25,10 +25,20 @@ const itemOptions = async (quantity, size, grind, itemId) => {
   return reuslt;
 };
 
+const postItemReviews = async (reviewTitle, reviewDetails, reviewImage, rates, userId, itemId) => {
+  const result = await itemsDao.postItemReviews(reviewTitle, reviewDetails, reviewImage, rates, userId, itemId);
+  return result;
+};
+
+const deleteItemReviews = async (reviewId) => {
+  return await itemsDao.deleteItemReviews(reviewId);
+};
 module.exports = {
   getCategoryItems,
   getSubCategoryItems,
   itemDetailsPage,
   itemOptions,
   getItemReviews,
+  postItemReviews,
+  deleteItemReviews,
 };
