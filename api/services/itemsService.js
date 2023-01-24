@@ -30,8 +30,8 @@ const postItemReviews = async (reviewTitle, reviewDetails, reviewImage, rates, u
   return result;
 };
 
-const deleteItemReviews = async (reviewId) => {
-  return await itemsDao.deleteItemReviews(reviewId);
+const deleteItemReviews = async (reviewId, userId) => {
+  return await itemsDao.deleteItemReviews(reviewId, userId);
 };
 module.exports = {
   getCategoryItems,

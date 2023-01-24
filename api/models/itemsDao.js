@@ -1,9 +1,8 @@
 const { mysqlDatabase } = require("./dbconfig");
 
 const getCategoryItems = async (continentId) => {
-  try {
-    const result = await mysqlDatabase.query(
-      `
+  return await mysqlDatabase.query(
+    `
       SELECT
         items.id,
         name,
@@ -12,20 +11,13 @@ const getCategoryItems = async (continentId) => {
       FROM items
       WHERE continent_id = ?
     `,
-      [continentId]
-    );
-    return result;
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    [continentId]
+  );
 };
 
 const getSubCategoryItems = async (countryId) => {
-  try {
-    const result = await mysqlDatabase.query(
-      `
+  return await mysqlDatabase.query(
+    `
       SELECT
         c.id as id,
         c.continent as continent,
@@ -46,21 +38,14 @@ const getSubCategoryItems = async (countryId) => {
       INNER JOIN sub_categories s ON s.id = i.country_id
       WHERE i.country_id = ?
       GROUP BY s.country, c.continent, c.id;
-      `,
-      [countryId]
-    );
-    return result;
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    `,
+    [countryId]
+  );
 };
 
 const itemDetailsPage = async (itemId) => {
-  try {
-    const [result] = await mysqlDatabase.query(
-      `
+  const [result] = await mysqlDatabase.query(
+    `
       SELECT
         id,
         name,
@@ -69,22 +54,15 @@ const itemDetailsPage = async (itemId) => {
         item_img
       FROM items
       WHERE items.id = ?
-      `,
-      [itemId]
-    );
-    return result;
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    `,
+    [itemId]
+  );
+  return result;
 };
 
 const getItemReviews = async (itemId, offset, limit) => {
-  console.log(itemId, offset, limit);
-  try {
-    const result = await mysqlDatabase.query(
-      `
+  return await mysqlDatabase.query(
+    `
       SELECT
         id,
         user_name,
@@ -94,42 +72,30 @@ const getItemReviews = async (itemId, offset, limit) => {
         rates
       FROM reviews 
       WHERE item_id = ?
+      ORDER BY reviews.id DESC
       LIMIT ?, ?
-      `,
-      [itemId, offset, limit]
-    );
-    return result;
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    `,
+    [itemId, offset, limit]
+  );
 };
 
 const itemOptions = async (quantity, size, grind, itemId) => {
-  try {
-    await mysqlDatabase.query(
-      `
+  await mysqlDatabase.query(
+    `
       INSERT INTO item_options (
         quantity,
         size_option_id,
         grind_option_id,
         item_id
       ) VALUES (?, ?, ?, ?)
-      `,
-      [quantity, size, grind, itemId]
-    );
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    `,
+    [quantity, size, grind, itemId]
+  );
 };
 
 const postItemReviews = async (reviewTitle, reviewDetails, reviewImage, rates, userId, itemId) => {
-  try {
-    await mysqlDatabase.query(
-      `
+  await mysqlDatabase.query(
+    `
       INSERT INTO reviews (
         review_title,
         review_details,
@@ -138,32 +104,22 @@ const postItemReviews = async (reviewTitle, reviewDetails, reviewImage, rates, u
         user_id,
         item_id
       ) VALUES ( ?, ?, ?, ?, ?, ? )
-        `,
-      [reviewTitle, reviewDetails, reviewImage, rates, userId, itemId]
-    );
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    err.statusCode = 500;
-    throw error;
-  }
+    `,
+    [reviewTitle, reviewDetails, reviewImage, rates, userId, itemId]
+  );
 };
 
-const deleteItemReviews = async (reviewId) => {
-  try {
-    return await mysqlDatabase.query(
-      `
+const deleteItemReviews = async (reviewId, userId) => {
+  await mysqlDatabase.query(
+    `
       DELETE FROM
         reviews
-      WHERE id = ?
-      `,
-      [reviewId]
-    );
-  } catch {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.mysqlDatabase = 500;
-    throw error;
-  }
+      WHERE id = ? AND user_id = ?
+    `,
+    [reviewId, userId]
+  );
 };
+
 module.exports = {
   getCategoryItems,
   getSubCategoryItems,
