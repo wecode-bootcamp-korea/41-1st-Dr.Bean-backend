@@ -1,13 +1,8 @@
 const { mysqlDatabase } = require("./dbconfig");
-const bcrypt = require("bcrypt");
 
-const createUser = async (userId, name, password, email, phoneNumber, point) => {
-  const saltRounds = 12;
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-  try {
-    await mysqlDatabase.query(
-      `
+const createUser = async (userId, name, hashedPassword, email, phoneNumber, point) => {
+  return mysqlDatabase.query(
+    `
       INSERT INTO users (
         username,
         name,
@@ -17,35 +12,23 @@ const createUser = async (userId, name, password, email, phoneNumber, point) => 
         point
     ) VALUES (?, ?, ?, ?, ?, ?);
       `,
-      [userId, name, hashedPassword, email, phoneNumber, point]
-    );
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw err;
-  }
+    [userId, name, hashedPassword, email, phoneNumber, point]
+  );
 };
 
-const login = async (userId) => {
-  try {
-    const [users] = await mysqlDatabase.query(
-      `
+const getUserByUsername = async (userId) => {
+  return await mysqlDatabase.query(
+    `
       SELECT
         *
       FROM users
       WHERE username = ?
       `,
-      [userId]
-    );
-    return users;
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    [userId]
+  );
 };
 
 module.exports = {
   createUser,
-  login,
+  getUserByUsername,
 };

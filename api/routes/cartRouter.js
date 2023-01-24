@@ -1,11 +1,11 @@
 const express = require("express");
-const { validateToken } = require("../middleware/auth");
+const { validateToken } = require("../utils/auth");
 const cartControllers = require("../controllers/cartControllers");
 const router = express.Router();
 
-router.get("/", validateToken, cartControllers.getUserCart);
-router.post("/", validateToken, cartControllers.postUserCarts);
-router.delete("/:cartId", validateToken, cartControllers.deleteCart);
+router.get("/", validateToken, cartController.getUserCart);
+router.post("/", validateToken, cartController.postUserCarts);
+router.delete("/:cartId", validateToken, cartController.deleteCart);
 
 module.exports = {
   router,
