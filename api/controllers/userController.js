@@ -1,42 +1,33 @@
 const userService = require("../services/userService");
+const { catchAsync } = require("../utils/error");
 
-const signup = async (req, res) => {
-  try {
-    const { userId, name, password, email, phoneNumber, point } = req.body;
+const signup = catchAsync(async (req, res) => {
+  const { userId, name, password, email, phoneNumber, point } = req.body;
 
-    if (!userId || !name || !password || !email || !phoneNumber || !point) {
-      return res.status(400).json({ message: "KEY_ERROR" });
-    }
-
-    await userService.signUp(userId, name, password, email, phoneNumber, point);
-    return res.status(200).json({ message: "SIGNUP_SUCCESS" });
-  } catch (err) {
-    console.log(err);
-    return res.status(err.statusCode || 500).json({ message: err.message });
+  if (!userId || !name || !password || !email || !phoneNumber || !point) {
+    const err = new Error("KEY_ERROR");
+    err.statusCode = 400;
+    throw err;
   }
-};
 
-const signin = async (req, res) => {
-  try {
-    const { userId, password } = req.body;
+  await userService.signUp(userId, name, password, email, phoneNumber, point);
+  return res.status(200).json({ message: "SIGNUP_SUCCESS" });
+});
 
-    if (!userId || !password) {
-      return res.status(400).json({ message: "KEY_ERROR" });
-    }
+const getUserByUsername = catchAsync(async (req, res) => {
+  const { userId, password } = req.body;
 
-    const { jwtToken, checkHash } = await userService.signIn(userId, password);
-
-    if (!checkHash) {
-      res.status(401).json({ message: "PASSWORD_IS_DIFFERENT" });
-    }
-    return res.status(200).json({ accessToken: jwtToken });
-  } catch (err) {
-    console.log(err);
-    return res.status(err.statusCode || 500).json({ message: err.message });
+  if (!userId || !password) {
+    const err = new Error("KEY_ERROR");
+    err.statusCode = 400;
+    throw err;
   }
-};
+
+  const { jwtToken } = await userService.getUserByUsername(userId, password);
+  return res.status(200).json({ accessToken: jwtToken });
+});
 
 module.exports = {
   signup,
-  signin,
+  getUserByUsername,
 };
