@@ -10,6 +10,6 @@ const cartRouter = require("./cartRouter");
 router.use("/items", itemsRouter.router);
 router.use("/order", orderRouter.router);
 router.use("", userRouter.router);
-router.use("/carts", cartRouter.router);
+router.use("/cart", cartRouter.router);
 
 module.exports = router;
