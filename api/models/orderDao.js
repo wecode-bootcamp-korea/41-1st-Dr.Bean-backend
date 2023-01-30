@@ -7,9 +7,8 @@ const ORDER_STATUS = Object.freeze({
 });
 
 const getOrder = async (userId) => {
-  try {
-    const result = await mysqlDatabase.query(
-      `
+  return await mysqlDatabase.query(
+    `
       SELECT
         name,
         phone_num,
@@ -18,19 +17,17 @@ const getOrder = async (userId) => {
       FROM users
       WHERE id = ?
       `,
-      [userId]
-    );
-    return result;
-  } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
-  }
+    [userId]
+  );
 };
 
 const addressAndItems = async (zipCode, address, reAddress, message, size, grind, itemId, userId) => {
+  const queryRunner = mysqlDatabase.createQueryRunner();
+  await queryRunner.connect();
+  await queryRunner.startTransaction();
+
   try {
-    await mysqlDatabase.query(
+    await queryRunner.query(
       `
       INSERT INTO users_address (
         zip_code,
@@ -43,7 +40,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       [zipCode, address, reAddress, message, userId]
     );
 
-    const [itemOptions] = await mysqlDatabase.query(
+    const [itemOptions] = await queryRunner.query(
       `
       SELECT
         id
@@ -53,7 +50,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       [size, grind, itemId]
     );
 
-    const [user] = await mysqlDatabase.query(
+    const [user] = await queryRunner.query(
       `
       SELECT
         id
@@ -63,7 +60,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       [userId]
     );
 
-    await mysqlDatabase.query(
+    await queryRunner.query(
       `
       INSERT INTO orders (
         user_id,
@@ -74,7 +71,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       [userId, user.id, ORDER_STATUS.배송중]
     );
 
-    const [orderId] = await mysqlDatabase.query(
+    const [orderId] = await queryRunner.query(
       `
       SELECT
         id
@@ -84,7 +81,7 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       [userId]
     );
 
-    await mysqlDatabase.query(
+    await queryRunner.query(
       `
       INSERT INTO order_items (
         item_id,
@@ -96,10 +93,13 @@ const addressAndItems = async (zipCode, address, reAddress, message, size, grind
       `,
       [itemId, 1, itemOptions.id, ORDER_STATUS.배송중, orderId.id]
     );
+
+    await queryRunner.commitTransaction();
   } catch (err) {
-    const error = new Error("INVALID_DATA_INPUT");
-    error.statusCode = 500;
-    throw error;
+    await queryRunner.rollbackTransaction();
+    throw new Error("ORDER_FAILED");
+  } finally {
+    await queryRunner.release();
   }
 };
 

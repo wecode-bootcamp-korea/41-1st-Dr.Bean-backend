@@ -1,11 +1,11 @@
 const express = require("express");
-const orderControllers = require("../controllers/orderControllers");
+const orderController = require("../controllers/orderController");
 const { validateToken } = require("../utils/auth");
 
 const router = express.Router();
 
-router.get("", validateToken, orderControllers.getOrder);
-router.post("", validateToken, orderControllers.addressAndItems);
+router.get("", validateToken, orderController.getOrder);
+router.post("", validateToken, orderController.addressAndItems);
 
 module.exports = {
   router,
